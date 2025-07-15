@@ -7,12 +7,14 @@ const Card = ( {munequito} )=>{
   return(
     <section
     className="w-[300px] bg-yellow-50 border rounded-lg">
-      <img src={munequito.image}/>
+      <img src={munequito?.image}/>
 
-      <h2>{munequito.name}</h2>
-      <h4>gender: {munequito.gender}</h4>
-      <h4>specie: {munequito.species}</h4>
-
+      <div className="p-3">
+        <h2>{munequito?.name}</h2>
+        <h4>gender: {munequito?.gender}</h4>
+        <h4>specie: {munequito?.species}</h4>
+      </div>
+      
     </section>
   )
 }
