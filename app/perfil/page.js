@@ -5,7 +5,7 @@ import { Footer } from "@/componentes/Footer";
 export default function Perfil() {
 
   return (
-    <>
+    <div className="flex flex-col h-max">
       <Header/>
 
       <div className="p-8">
@@ -14,6 +14,6 @@ export default function Perfil() {
       </div>
 
       <Footer/>
-    </>
+    </div>
   );
 }

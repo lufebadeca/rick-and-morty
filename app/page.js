@@ -28,14 +28,13 @@ export default function Home() {
  
 
   return (
-    <div className="h-[100vh] ">
+    <div className="flex flex-col h-max">
 
      <Header/>
 
       <h1>Chatea con un personaje</h1>
 
       <div className="flex">
-        <ListaPersonajes personajes={personajes}/>
       
         <section className="p-8 flex flex-wrap gap-3 overflow-auto">
           { personajes.map( (personaje)=>
