@@ -69,7 +69,7 @@ export default function Chat() {
 
           <section className="flex flex-col flex-1 p-4 bg-white rounded-lg shadow-md">
             {conversacion.map( (mensaje, index)=> 
-              <p key={index} className={`p-2 m.1 rounded-lg w-3/4 ${mensaje.remitente === "yo" ? 
+              <p key={index} className={`p-2 m-1 rounded-lg w-3/4 ${mensaje.remitente === "yo" ? 
                     "bg-blue-500 text-white self-end" : 
                     "bg-gray-200 text-gray-800 self-start"}`}
                     >
