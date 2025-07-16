@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/componentes/Header";
 import Card from "@/componentes/Card";
 import { Footer } from "@/componentes/Footer";
+import { ListaPersonajes } from "@/componentes/ListaPersonajes.js";
 
 export default function Home() {
 
@@ -15,9 +16,9 @@ export default function Home() {
   useEffect( ()=>{
     async function traerPersonajes (){
       const resp = await fetch('https://rickandmortyapi.com/api/character');
-      console.log(resp)
+      //console.log(resp)
       const respuesta = await resp.json();
-      console.log(respuesta)
+      //console.log(respuesta)
       const listaPersonajes = respuesta.results //lista
       //guardar la lista de personajes en un estado, para poderlo usar en el contenido
       setPersonajes(listaPersonajes);
@@ -32,15 +33,20 @@ export default function Home() {
      <Header/>
 
       <h1>Chatea con un personaje</h1>
+
+      <div className="flex">
+        <ListaPersonajes personajes={personajes}/>
       
-      <div className="p-8 flex flex-wrap gap-3 overflow-auto">
-        
-        { personajes.map( (personaje)=>
-          <Link href={`/chat/${personaje.id}`} key={personaje.id}>
-           <Card munequito={personaje} /> 
-          </Link>
-        )}
+        <section className="p-8 flex flex-wrap gap-3 overflow-auto">
+          { personajes.map( (personaje)=>
+            <Link href={`/chat/${personaje.id}`} key={personaje.id}>
+            <Card munequito={personaje} /> 
+            </Link>
+          )}
+        </section>
+
       </div>
+      
 
       <Footer/>
     </div>

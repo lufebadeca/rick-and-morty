@@ -2,8 +2,6 @@ import React from "react";
 
 const Card = ( {munequito} )=>{
 
-  console.log("qué es personaje aquí?",munequito)
-
   return(
     <section
     className="w-[300px] bg-yellow-50 border rounded-lg">
