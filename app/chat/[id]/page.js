@@ -11,7 +11,7 @@ export default function Chat() {
   const [ personajeActivo, setPersonajeActivo] = useState();
 
   const [conversacion, setConversacion] = useState([{remitente: "", texto: "Hola"}]);
-  const [mensaje, setMensaje] = useState("");
+  const [textoInput, setTextoInput] = useState("");
 
   const params = useParams(); // { id: 7 }
   const idActivo = params.id;  //7
@@ -43,12 +43,14 @@ export default function Chat() {
   }, [personajes])
 
   const enviarMensaje=()=>{
-    if (mensaje==="") return
+    if (textoInput==="") return
     // mensaje: {remitente: "yo", texto: "hola"}
     // conversacion:  ["hola", "como estas", "bien"]
 
-    setConversacion((prev) => { return [...prev, {remitente: "yo", texto: mensaje}] }); // retorno implícito correcto
-    setMensaje("")
+    const nuevoMensaje = {remitente: "yo", texto: textoInput}
+
+    setConversacion((prev) => { return [...prev, nuevoMensaje] }); // retorno implícito correcto
+    setTextoInput("")
     console.log(conversacion)
   }
 
@@ -84,8 +86,8 @@ export default function Chat() {
               type="text"
               placeholder="escribe un mensaje"
               className="border border-blue-300 w-full bg-white rounded-sm p-2 hover:border-blue-600"
-              value={mensaje}
-              onChange={ (e)=>setMensaje(e.target.value) }
+              value={textoInput}
+              onChange={ (e)=>setTextoInput(e.target.value) }
               onKeyDown={(e)=>e.key==="Enter" && enviarMensaje()}
               />
             <button
