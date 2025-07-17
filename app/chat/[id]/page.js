@@ -10,16 +10,16 @@ export default function Chat() {
   const [ personajes, setPersonajes ] = useState( [] ); //un estado, y una funcion para cambiar es estado
   const [ personajeActivo, setPersonajeActivo] = useState();
 
-  const [conversacion, setConversacion] = useState([{remitente: "", texto: "Hola"}]);
+  //estados clave para la conversación: uno con el texto a escribir
   const [textoInput, setTextoInput] = useState("");
+  //el otro estado es un array que guarda mensajes
+  const [conversacion, setConversacion] = useState([{remitente: "", texto: "Hola"}]);
 
-  const params = useParams(); // { id: 7 }
-  const idActivo = params.id;  //7
+  const params = useParams(); // useParams lee el id incrustado en la URL de la ruta: ej: { id: 7 }
+  const idActivo = params.id;  // el id traido de params: ej: 7
   //console.log(idActivo);
-
-  //estado que llevará la lista de personajes
   
-  //ata la ejecucion de la funcion del fetch a la primera carga del componente
+  ////este use effect trae los 20 personajes con fetch en la primera carga del componente
   useEffect( ()=>{
     async function traerPersonajes (){
       const resp = await fetch('https://rickandmortyapi.com/api/character');
@@ -31,8 +31,9 @@ export default function Chat() {
       setPersonajes(listaPersonajes);
     }
     traerPersonajes();
-  }, [] ) //
+  }, [] ) 
 
+  //este useEffect es para traer un unico personaje que es el activo en la page
   useEffect( ()=>{
     async function traerActivo (){
       const resp = await fetch('https://rickandmortyapi.com/api/character/'+ idActivo);
@@ -42,16 +43,17 @@ export default function Chat() {
     traerActivo();
   }, [personajes])
 
+  //funcion que envia el mensaje
   const enviarMensaje=()=>{
-    if (textoInput==="") return
-    // mensaje: {remitente: "yo", texto: "hola"}
-    // conversacion:  ["hola", "como estas", "bien"]
+    if (textoInput==="") return //si el texto a enviar es vacio, sale
+    // mensaje es un objeto con propiedades: {remitente: "yo", texto: "hola"}
+    // conversacion es una lista de mensajes:  [remitente: "", texto: "hi", remitente: "yo", texto: "bye"]
 
-    const nuevoMensaje = {remitente: "yo", texto: textoInput}
+    const nuevoMensaje = {remitente: "yo", texto: textoInput};
 
     setConversacion((prev) => { return [...prev, nuevoMensaje] }); // retorno implícito correcto
-    setTextoInput("")
-    console.log(conversacion)
+    setTextoInput("");
+    console.log(conversacion);
   }
 
   return (
@@ -73,7 +75,7 @@ export default function Chat() {
             {conversacion.map( (mensaje, index)=> 
               <p key={index} className={`p-2 m-1 rounded-lg w-3/4 ${mensaje.remitente === "yo" ? 
                     "bg-blue-500 text-white self-end" : 
-                    "bg-gray-200 text-gray-800 self-start"}`}
+                    "bg-gray-200 text-gray-800 self-start"}`} //estilos condicionales segun remitente
                     >
                 {mensaje.texto}
               </p>
@@ -88,7 +90,7 @@ export default function Chat() {
               className="border border-blue-300 w-full bg-white rounded-sm p-2 hover:border-blue-600"
               value={textoInput}
               onChange={ (e)=>setTextoInput(e.target.value) }
-              onKeyDown={(e)=>e.key==="Enter" && enviarMensaje()}
+              onKeyDown={(e)=>e.key==="Enter" && enviarMensaje()} //evento de tecla enter
               />
             <button
               className="bg-blue-300 border px-4 py-2 rounded-md hover:cursor-pointer hover:-translate-y-0.5"
