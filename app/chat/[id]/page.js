@@ -5,6 +5,9 @@ import { Footer } from "@/componentes/Footer";
 import { useParams } from "next/navigation"; //lee los params de la ruta
 import { ListaPersonajes } from "@/componentes/ListaPersonajes";
 import { useState, useEffect } from "react";
+import {GoogleGenAI} from "@google/genai"
+
+const ai = new GoogleGenAI( {apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY} );
 
 export default function Chat() {
   const [ personajes, setPersonajes ] = useState( [] ); //un estado, y una funcion para cambiar es estado
@@ -44,16 +47,28 @@ export default function Chat() {
   }, [personajes])
 
   //funcion que envia el mensaje
-  const enviarMensaje=()=>{
+  const enviarMensaje=async ()=>{
     if (textoInput==="") return //si el texto a enviar es vacio, sale
     // mensaje es un objeto con propiedades: {remitente: "yo", texto: "hola"}
     // conversacion es una lista de mensajes:  [remitente: "", texto: "hi", remitente: "yo", texto: "bye"]
 
     const nuevoMensaje = {remitente: "yo", texto: textoInput};
-
-    setConversacion((prev) => { return [...prev, nuevoMensaje] }); // retorno implícito correcto
+    
+    setConversacion((prev) => { return [...prev, nuevoMensaje] });
+    const response = await geminiResponse(textoInput);
+    const mensajeRespta = {remitente: "gemini", texto: response}
+    setConversacion((prev) => { return [...prev, mensajeRespta] });
     setTextoInput("");
     console.log(conversacion);
+  }
+
+  const geminiResponse = async (prompt)=>{
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt
+    });
+    console.log(response);
+    return response.text;
   }
 
   return (
