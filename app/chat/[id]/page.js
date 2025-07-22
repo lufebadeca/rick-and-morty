@@ -16,7 +16,7 @@ export default function Chat() {
   //estados clave para la conversación: uno con el texto a escribir
   const [textoInput, setTextoInput] = useState("");
   //el otro estado es un array que guarda mensajes
-  const [conversacion, setConversacion] = useState([{remitente: "", texto: "Hola"}]);
+  const [conversacion, setConversacion] = useState([]);
 
   const params = useParams(); // useParams lee el id incrustado en la URL de la ruta: ej: { id: 7 }
   const idActivo = params.id;  // el id traido de params: ej: 7
@@ -27,12 +27,13 @@ export default function Chat() {
   //ref para ubicar el final del chat
   const [loader, setLoader] = useState(false);
   const chatWindowRef = useRef(null);
-  useEffect(()=>{
-    
+
+  useEffect(()=>{ 
+    if (!conversacion || !personajeActivo) return;
     const chatInstance = ai.chats.create({
     model: "gemini-2.5-flash",
     config: {
-      systemInstruction: `Eres una persona llamada ${personajeActivo?.name}, tu género es ${personajeActivo?.gender}, tu origen es ${personajeActivo?.origin.name}`
+      systemInstruction: `Eres una persona llamada ${personajeActivo?.name}, tu género es ${personajeActivo?.gender}, tu origen es ${personajeActivo?.origin.name} y estamos en una conversación de chat`
     },
     history: conversacion.map( (msg)=>
       ( { role: msg.remitente === "yo" ? "user" : "model", parts: [{text: msg.texto}] } )
@@ -41,7 +42,7 @@ export default function Chat() {
 
     chatWindowRef.current?.scrollIntoView({behavior: "smooth"});
 
-  }, [conversacion])
+  }, [conversacion, personajeActivo])
   
   ////este use effect trae los 20 personajes con fetch en la primera carga del componente
   useEffect( ()=>{
@@ -65,7 +66,7 @@ export default function Chat() {
       setPersonajeActivo(respuesta);
     }
     traerActivo();
-  }, [personajes])
+  }, [idActivo])
 
   //funcion que envia el mensaje
   const enviarMensaje=async ()=>{
